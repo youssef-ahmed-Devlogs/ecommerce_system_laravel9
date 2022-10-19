@@ -38,7 +38,6 @@
                                 @empty
                                     <option value="">Please add category first...</option>
                                 @endforelse
-
                             </select>
                         </div>
                     </div>
@@ -55,6 +54,20 @@
                                 </span>
                             @enderror
                         </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-12">
+                    <div class="form-group">
+                        <label for="cover">Cover</label>
+                        <input type="file" class="form-control @error('cover') is-invalid @enderror" name="cover"
+                            id="cover">
+
+                        @error('cover')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                 </div>
 

@@ -61,6 +61,23 @@
                             @enderror
                         </div>
                     </div>
+
+
+                    <div class="col-xl-12">
+                        <img src="{{ asset('storage/' . $current_category->cover) }}"
+                            style="width: 300px;border-radius: 5px;object-fit: contain" alt="" class="mb-2 mt-3">
+                        <div class="form-group">
+                            <label for="cover">Cover</label>
+                            <input type="file" class="form-control @error('cover') is-invalid @enderror" name="cover"
+                                id="cover">
+
+                            @error('cover')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <button class="btn btn-success">Edit Category</button>

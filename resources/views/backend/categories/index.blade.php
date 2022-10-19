@@ -18,6 +18,7 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Cover</th>
                         <th scope="col">Name</th>
                         <th scope="col">Description</th>
                         <th scope="col">Parent</th>
@@ -28,8 +29,11 @@
                     @forelse ($categories as $category)
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
+                            <td>
+                                <img src="{{ asset('storage/' . $category->cover) }}" alt="">
+                            </td>
                             <td>{{ $category->name }}</td>
-                            <td>{{ $category->description }}</td>
+                            <td>{{ $category->description ? $category->description : 'Has no description.' }}</td>
                             <td>
                                 {{ $category->category() ? $category->category()->name : 'Has no parent.' }}
                             </td>
@@ -47,7 +51,7 @@
                     @empty
                         <tr>
                             <td class="text-center" colspan="5">
-                                There are no users to show.
+                                There are no categories to show.
                             </td>
                         </tr>
                     @endforelse

@@ -29,6 +29,16 @@
         select {
             outline: none
         }
+
+        table img {
+            width: 100px;
+            border-radius: 5px;
+            object-fit: cover
+        }
+
+        table td {
+            vertical-align: middle
+        }
     </style>
 
     @yield('style')

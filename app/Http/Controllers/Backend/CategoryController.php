@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -38,8 +39,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => ['required', 'min:2', 'max:100']]);
-        Category::create($request->all());
+        $request->validate([
+            'name' => ['required', 'min:2', 'max:100'],
+            'cover' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048']
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('cover')) {
+            $cover = $request->file('cover')->store('categories_covers', 'public');
+            $data['cover'] =  $cover;
+        }
+
+        Category::create($data);
 
         flash()->addSuccess("The Category [ $request->name ] has been added successfully.");
         return redirect()->route('backend.categories.index');
@@ -65,7 +77,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $current_category = $category;
-        $categories = Category::all();
+        $categories = Category::where('id', '!=', $current_category->id)->get();
         return view('backend.categories.edit', compact('current_category', 'categories'));
     }
 
@@ -78,8 +90,25 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $request->validate(['name' => ['required', 'min:2', 'max:100']]);
-        $category->update($request->all());
+        $request->validate([
+            'name' => ['required', 'min:2', 'max:100'],
+            'cover' => ['image', 'mimes:jpeg,png,jpg', 'max:2048']
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('cover')) {
+
+            if ($category->cover && Storage::disk('public')->exists($category->cover)) {
+                // Remove old image
+                Storage::disk('public')->delete($category->cover);
+            }
+
+            $cover = $request->file('cover')->store('categories_covers', 'public');
+            $data['cover'] =  $cover;
+        }
+
+        $category->update($data);
 
         flash()->addSuccess("The Category [ $category->name ] has been updated successfully.");
         return redirect()->route('backend.categories.index');
@@ -93,6 +122,12 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+
+        if ($category->cover && Storage::disk('public')->exists($category->cover)) {
+            // Remove old image
+            Storage::disk('public')->delete($category->cover);
+        }
+
         $category->delete();
 
         flash()->addSuccess("The Category [ $category->name ] has been deleted successfully.");

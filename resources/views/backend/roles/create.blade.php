@@ -8,7 +8,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('backend.roles.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('backend.roles.store') }}" method="POST">
                 @csrf
 
                 <div class="row">
