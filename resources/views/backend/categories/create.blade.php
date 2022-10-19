@@ -4,38 +4,23 @@
 @endsection
 
 @section('content')
-    <h1 class="mb-3">Create User</h1>
+    <h1 class="mb-3">Create Category</h1>
 
     <div class="card">
-        <div class="card-header">Main Inforamtion</div>
+
         <div class="card-body">
 
-            <form action="{{ route('backend.users.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('backend.categories.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="form-group">
-                            <label for="first_name">First Name</label>
-                            <input type="text" class="form-control @error('first_name') is-invalid @enderror"
-                                name="first_name" id="first_name">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
+                                id="name">
 
-                            @error('first_name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-
-
-                    </div>
-
-                    <div class="col-xl-6">
-                        <div class="form-group">
-                            <label for="last_name">Last Name</label>
-                            <input type="text" class="form-control @error('last_name') is-invalid @enderror"
-                                name="last_name" id="last_name">
-                            @error('last_name')
+                            @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -45,82 +30,35 @@
 
                     <div class="col-xl-6">
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-                                id="email">
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                    </div>
+                            <label for="parent">Parent</label>
+                            <select class="select2 form-control" name="parent" id="parent">
+                                <option value="">Chooice the parent...</option>
+                                @forelse ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @empty
+                                    <option value="">Please add category first...</option>
+                                @endforelse
 
-                    <div class="col-xl-6">
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                name="password" id="password">
-
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-xl-6">
-                        <div class="form-group">
-                            <label for="mobile">Mobile</label>
-                            <input type="text" class="form-control @error('mobile') is-invalid @enderror" name="mobile"
-                                id="mobile">
-
-                            @error('mobile')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-xl-6">
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <select class="select2 form-control" name="status" id="status">
-                                <option value="1">Active</option>
-                                <option value="0">Disabled</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="col-xl-6">
+                    <div class="col-xl-12">
                         <div class="form-group">
-                            <label for="user_image">Image</label>
-                            <input type="file" name="user_image" id="user_image"
-                                class="form-control @error('user_image') is-invalid @enderror">
+                            <label for="description">Description</label>
 
-                            @error('user_image')
+                            <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description"></textarea>
+
+                            @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-xl-6">
-                        <div class="form-group">
-                            <label for="role">Role</label>
-                            <select class="select2 form-control" name="role" id="role">
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->name }}">{{ $role->display_name }}</option>
-                                @endforeach
-                            </select>
                         </div>
                     </div>
                 </div>
 
-                <button class="btn btn-primary">Add User</button>
+                <button class="btn btn-primary">Add Category</button>
             </form>
         </div>
     </div>

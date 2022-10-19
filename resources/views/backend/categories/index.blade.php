@@ -5,13 +5,13 @@
 @endsection
 
 @section('content')
-    <h1 class="mb-3">Users</h1>
+    <h1 class="mb-3">Categories</h1>
 
     <div class="card">
         <div class="card-body">
-            <a href="{{ route('backend.users.create') }}" class="btn btn-primary mb-4">
+            <a href="{{ route('backend.categories.create') }}" class="btn btn-primary mb-4">
                 <i class="fas fa-plus"></i>
-                Add User
+                Add Category
             </a>
 
             <table id="datatable" class="table">
@@ -19,33 +19,29 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Parent</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ([] as $user)
+                    @forelse ($categories as $category)
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
-                            <td>{{ $user->first_name . ' ' . $user->last_name }}</td>
-                            <td>{{ $user->email }}</td>
+                            <td>{{ $category->name }}</td>
+                            <td>{{ $category->description }}</td>
                             <td>
-                                @forelse ($user->roles as $role)
-                                    {{ $role->display_name }}
-                                    {{ $loop->iteration < $user->roles->count() ? ',' : '' }}
-                                @empty
-                                    User
-                                @endforelse
+                                {{ $category->category() ? $category->category()->name : 'Has no parent.' }}
                             </td>
                             <td class="d-flex align-items-center" style="gap: 5px">
-                                <a href="{{ route('backend.users.edit', $user->id) }}" class="btn btn-sm btn-success">
+                                <a href="{{ route('backend.categories.edit', $category->id) }}"
+                                    class="btn btn-sm btn-success">
                                     Edit
                                 </a>
                                 <a href="#" class="btn btn-sm btn-danger" data-toggle="modal"
-                                    data-target="#deleteUserModal-{{ $loop->iteration }}">Delete</a>
+                                    data-target="#deleteCategoryModal-{{ $loop->iteration }}">Delete</a>
 
-                                @include('partial.backend.deleteUserModal')
+                                @include('partial.backend.deleteCategoryModal')
                             </td>
                         </tr>
                     @empty

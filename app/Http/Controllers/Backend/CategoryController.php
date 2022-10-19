@@ -15,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('backend.categories.index');
+        $categories = Category::all();
+        return view('backend.categories.index', compact('categories'));
     }
 
     /**
@@ -25,7 +26,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('backend.categories.create', compact('categories'));
     }
 
     /**
@@ -36,7 +38,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(['name' => ['required', 'min:2', 'max:100']]);
+        Category::create($request->all());
+
+        flash()->addSuccess("The Category [ $request->name ] has been added successfully.");
+        return redirect()->route('backend.categories.index');
     }
 
     /**
@@ -58,7 +64,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        $current_category = $category;
+        $categories = Category::all();
+        return view('backend.categories.edit', compact('current_category', 'categories'));
     }
 
     /**
@@ -70,7 +78,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $request->validate(['name' => ['required', 'min:2', 'max:100']]);
+        $category->update($request->all());
+
+        flash()->addSuccess("The Category [ $category->name ] has been updated successfully.");
+        return redirect()->route('backend.categories.index');
     }
 
     /**
@@ -81,6 +93,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        flash()->addSuccess("The Category [ $category->name ] has been deleted successfully.");
+        return redirect()->route('backend.categories.index');
     }
 }
