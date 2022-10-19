@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\ProductController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,7 @@ Route::group(['prefix' => 'admin', 'as' => 'backend.'], function () {
     });
 
     Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
   });
   // Admin Role End
 

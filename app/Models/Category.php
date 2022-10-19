@@ -15,4 +15,9 @@ class Category extends Model
     {
         return Category::find($this->parent);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

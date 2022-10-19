@@ -71,8 +71,8 @@
                 class="collapse {{ str_starts_with(request()->path(), 'admin/products') ? 'show' : '' }}"
                 aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="buttons.html">Products</a>
-                    <a class="collapse-item" href="buttons.html">Add Product</a>
+                    <a class="collapse-item" href="{{ route('backend.products.index') }}">Products</a>
+                    <a class="collapse-item" href="{{ route('backend.products.create') }}">Add Product</a>
                 </div>
             </div>
         </li>

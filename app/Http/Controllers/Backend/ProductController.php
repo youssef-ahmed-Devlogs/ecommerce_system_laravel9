@@ -1,9 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -14,7 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        return view('backend.products.index', compact('products'));
     }
 
     /**
@@ -24,7 +30,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('backend.products.create', compact('categories'));
     }
 
     /**
@@ -33,9 +40,29 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        $productsData = $request->except(['categories', 'images']);
+        $productsData['user_id'] = Auth::id();
+
+        $product = Product::create($productsData);
+        $product->categories()->attach($request->categories);
+
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+
+            foreach ($images as $image) {
+                $path = $image->store('product_images/' . $product->id, 'public');
+
+                $productImages = new ProductImage();
+                $productImages->path = $path;
+                $productImages->product_id = $product->id;
+                $productImages->save();
+            }
+        }
+
+        flash()->addSuccess("The Product [ $request->title ] has been added successfully.");
+        return redirect()->route('backend.products.index');
     }
 
     /**
@@ -57,7 +84,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $categories = Category::all();
+        return view('backend.products.edit', compact('categories'));
     }
 
     /**
