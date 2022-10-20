@@ -55,9 +55,9 @@
                                     Edit
                                 </a>
                                 <a href="#" class="btn btn-sm btn-danger" data-toggle="modal"
-                                    data-target="#deleteCategoryModal-{{ $loop->iteration }}">Delete</a>
+                                    data-target="#deleteProductModal-{{ $loop->iteration }}">Delete</a>
 
-                                {{-- @include('partial.backend.deleteCategoryModal') --}}
+                                @include('partial.backend.deleteProductModal')
                             </td>
                         </tr>
                     @empty

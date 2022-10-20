@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -85,7 +86,13 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
-        return view('backend.products.edit', compact('categories'));
+        $productCategoriesIds = [];
+
+        foreach ($product->categories as $category) {
+            $productCategoriesIds[] = $category->id;
+        }
+
+        return view('backend.products.edit', compact('categories', 'product', 'productCategoriesIds'));
     }
 
     /**
@@ -95,9 +102,39 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $productsData = $request->except(['categories', 'images']);
+        $product->update($productsData);
+        $product->categories()->sync($request->categories);
+
+
+        if ($request->hasFile('images')) {
+
+            foreach ($product->images as $image) {
+
+                if (Storage::disk('public')->exists($image->path)) {
+                    // Remove old image
+                    Storage::disk('public')->delete($image->path);
+                }
+
+                $image->delete();
+            }
+
+            $images = $request->file('images');
+
+            foreach ($images as $image) {
+                $path = $image->store('product_images/' . $product->id, 'public');
+
+                $productImages = new ProductImage();
+                $productImages->path = $path;
+                $productImages->product_id = $product->id;
+                $productImages->save();
+            }
+        }
+
+        flash()->addSuccess("The Product [ $request->title ] has been updated successfully.");
+        return redirect()->route('backend.products.index');
     }
 
     /**
@@ -108,6 +145,16 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        foreach ($product->images as $image) {
+            if (Storage::disk('public')->exists($image->path)) {
+                // Remove old image
+                Storage::disk('public')->delete($image->path);
+            }
+        }
+
+        $product->delete();
+
+        flash()->addSuccess("The Product [ $product->title ] has been deleted successfully.");
+        return redirect()->route('backend.products.index');
     }
 }
