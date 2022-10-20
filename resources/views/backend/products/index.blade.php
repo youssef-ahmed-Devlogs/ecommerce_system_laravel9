@@ -35,7 +35,7 @@
                                 <img src="{{ asset('storage/' . $product->images[0]->path) }}" alt="">
                             </td>
                             <td>{{ $product->title }}</td>
-                            <td>{{ $product->description ? $product->description : 'Has no description.' }}</td>
+                            <td style="width: 300px">{{ $product->desc ? $product->desc : 'Has no description.' }}</td>
                             <td>
                                 {{ $product->price }}
                             </td>
