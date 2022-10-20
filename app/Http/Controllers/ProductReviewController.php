@@ -14,7 +14,7 @@ class ProductReviewController extends Controller
      */
     public function index()
     {
-        //
+        return 'Reviews';
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\ProductReviewController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -44,8 +45,17 @@ Route::group(['prefix' => 'admin', 'as' => 'backend.'], function () {
       Route::post('/{id}/delete', [RoleController::class, 'destroy'])->name('destroy');
     });
 
+    // Categories
     Route::resource('categories', CategoryController::class);
-    Route::resource('products', ProductController::class);
+
+    // Products
+    Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
+      // Products
+      Route::resource('/', ProductController::class);
+      // Products Reviews
+      Route::resource('/reviews', ProductReviewController::class);
+    });
+    // End Products
   });
   // Admin Role End
 

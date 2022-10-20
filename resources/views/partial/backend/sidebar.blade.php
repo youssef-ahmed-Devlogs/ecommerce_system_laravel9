@@ -72,10 +72,12 @@
                 aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="{{ route('backend.products.index') }}">Products</a>
+                    <a class="collapse-item" href="{{ route('backend.products.reviews.index') }}">Products Reviews</a>
                     <a class="collapse-item" href="{{ route('backend.products.create') }}">Add Product</a>
                 </div>
             </div>
         </li>
+
 
 
         <!-- Divider -->
