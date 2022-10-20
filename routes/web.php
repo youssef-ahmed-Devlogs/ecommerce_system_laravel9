@@ -6,7 +6,7 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\ProductController;
-use App\Http\Controllers\ProductReviewController;
+use App\Http\Controllers\Backend\ProductReviewController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +54,8 @@ Route::group(['prefix' => 'admin', 'as' => 'backend.'], function () {
       Route::resource('/', ProductController::class);
       // Products Reviews
       Route::resource('/reviews', ProductReviewController::class);
+      Route::post('/reviews/{review}/approved', [ProductReviewController::class, 'approved'])->name('reviews.approved');
+      Route::post('/reviews/{review}/hide', [ProductReviewController::class, 'hide'])->name('reviews.hide');
     });
     // End Products
   });
