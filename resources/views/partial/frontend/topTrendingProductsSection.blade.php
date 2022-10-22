@@ -19,7 +19,7 @@
                             <div class="badge text-white badge-danger">Sold</div>
                         @endif
 
-                        <a class="d-block" href="detail.html">
+                        <a class="d-block" href="{{ route('frontend.products.show', $trendProduct->id) }}">
                             <img class="img-fluid w-100" src="{{ asset('storage/' . $trendProduct->images[0]->path) }}"
                                 alt="...">
                         </a>

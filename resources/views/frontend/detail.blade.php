@@ -9,46 +9,48 @@
                     <div class="row m-sm-0">
                         <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0">
                             <div class="owl-thumbs d-flex flex-row flex-sm-column" data-slider-id="1">
-                                <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100"
-                                        src="{{ asset('frontend/img/product-detail-1.jpg') }}" alt="..."></div>
-                                <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100"
-                                        src="{{ asset('frontend/img/product-detail-2.jpg') }}" alt="..."></div>
-                                <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100"
-                                        src="{{ asset('frontend/img/product-detail-3.jpg') }}" alt="..."></div>
-                                <div class="owl-thumb-item flex-fill mb-2"><img class="w-100"
-                                        src="{{ asset('frontend/img/product-detail-4.jpg') }}" alt="..."></div>
+
+                                @forelse ($product->images as $image)
+                                    <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0">
+                                        <img class="w-100" src="{{ asset('storage/' . $image->path) }}"
+                                            alt="{{ $product->title }}">
+                                    </div>
+                                @empty
+                                @endforelse
                             </div>
                         </div>
                         <div class="col-sm-10 order-1 order-sm-2">
-                            <div class="owl-carousel product-slider" data-slider-id="1"><a class="d-block"
-                                    href="img/product-detail-1.jpg" data-lightbox="product" title="Product item 1"><img
-                                        class="img-fluid" src="{{ asset('frontend/img/product-detail-1.jpg') }}"
-                                        alt="..."></a><a class="d-block" href="img/product-detail-2.jpg"
-                                    data-lightbox="product" title="Product item 2"><img class="img-fluid"
-                                        src="{{ asset('frontend/img/product-detail-2.jpg') }}" alt="..."></a><a
-                                    class="d-block" href="img/product-detail-3.jpg" data-lightbox="product"
-                                    title="Product item 3"><img class="img-fluid"
-                                        src="{{ asset('frontend/img/product-detail-3.jpg') }}" alt="..."></a><a
-                                    class="d-block" href="img/product-detail-4.jpg" data-lightbox="product"
-                                    title="Product item 4"><img class="img-fluid"
-                                        src="{{ asset('frontend/img/product-detail-4.jpg') }}" alt="..."></a></div>
+                            <div class="owl-carousel product-slider" data-slider-id="1">
+                                @forelse ($product->images as $image)
+                                    <a class="d-block" href="{{ asset('storage/' . $image->path) }}" data-lightbox="product"
+                                        title="{{ $product->title }}">
+                                        <img class="img-fluid" src="{{ asset('storage/' . $image->path) }}"
+                                            alt="{{ $product->title }}">
+                                    </a>
+                                @empty
+                                @endforelse
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- PRODUCT DETAILS-->
                 <div class="col-lg-6">
-                    <ul class="list-inline mb-2">
-                        <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                        <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                        <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                        <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                        <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                    </ul>
-                    <h1>Red digital smartwatch</h1>
-                    <p class="text-muted lead">$250</p>
-                    <p class="text-small mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut ullamcorper
-                        leo, eget euismod orci. Cum sociis natoque penatibus et magnis dis parturient montes nascetur
-                        ridiculus mus. Vestibulum ultricies aliquam convallis.</p>
+
+                    <div class="d-flex align-items-center mb-2" style="gap:5px">
+                        <span class="text-muted">( {{ $product->reviews->count() }} )</span>
+                        <ul class="product-avg-rate list-inline m-0">
+
+                            @for ($i = 1; $i <= 5; $i++)
+                                <li class="list-inline-item {{ $averageRate >= $i ? ' active' : '' }} m-0"><i
+                                        class="fas fa-star small"></i></li>
+                            @endfor
+                        </ul>
+                    </div>
+                    <h1>{{ $product->title }}</h1>
+                    <p class="text-muted lead">${{ $product->price }}</p>
+                    <p class="text-small mb-4">
+                        {{ substr($product->desc, 0, 300) }}
+                    </p>
                     <div class="row align-items-stretch mb-4">
                         <div class="col-sm-5 pr-sm-0">
                             <div
@@ -67,78 +69,149 @@
                     </div><a class="btn btn-link text-dark p-0 mb-4" href="#"><i class="far fa-heart mr-2"></i>Add
                         to wish list</a><br>
                     <ul class="list-unstyled small d-inline-block">
-                        <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">SKU:</strong><span
-                                class="ml-2 text-muted">039</span></li>
-                        <li class="px-3 py-2 mb-1 bg-white text-muted"><strong
-                                class="text-uppercase text-dark">Category:</strong><a class="reset-anchor ml-2"
-                                href="#">Demo Products</a></li>
-                        <li class="px-3 py-2 mb-1 bg-white text-muted"><strong
-                                class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ml-2"
-                                href="#">Innovation</a></li>
+                        <li class="px-3 py-2 mb-1 bg-white text-muted">
+                            <strong class="text-uppercase text-dark">Category:</strong>
+
+                            @forelse ($product->categories as $category)
+                                <a class="reset-anchor ml-2" href="#">{{ $category->name }}</a>
+                            @empty
+                                has no categories
+                            @endforelse
+                        </li>
+                        <li class="px-3 py-2 mb-1 bg-white text-muted">
+                            <strong class="text-uppercase text-dark">Tags:</strong>
+                            <a class="reset-anchor ml-2" href="#">Innovation</a>
+                        </li>
                     </ul>
                 </div>
             </div>
             <!-- DETAILS TABS-->
             <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
-                <li class="nav-item"><a class="nav-link active" id="description-tab" data-toggle="tab"
-                        href="#description" role="tab" aria-controls="description"
-                        aria-selected="true">Description</a></li>
-                <li class="nav-item"><a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews"
-                        role="tab" aria-controls="reviews" aria-selected="false">Reviews</a></li>
+                <li class="nav-item"><a class="nav-link active" id="description-tab" data-toggle="tab" href="#description"
+                        role="tab" aria-controls="description" aria-selected="true">Description</a></li>
+                <li class="nav-item"><a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab"
+                        aria-controls="reviews" aria-selected="false">Reviews</a></li>
             </ul>
             <div class="tab-content mb-5" id="myTabContent">
-                <div class="tab-pane fade show active" id="description" role="tabpanel"
-                    aria-labelledby="description-tab">
+                <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                     <div class="p-4 p-lg-5 bg-white">
                         <h6 class="text-uppercase">Product description </h6>
-                        <p class="text-muted text-small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-                            sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                            laborum.</p>
+                        <p class="text-muted text-small mb-0">
+                            {{ $product->desc }}
+                        </p>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                     <div class="p-4 p-lg-5 bg-white">
                         <div class="row">
                             <div class="col-lg-8">
-                                <div class="media mb-3"><img class="rounded-circle"
-                                        src="{{ asset('frontend/img/customer-1.png') }}" alt="" width="50">
-                                    <div class="media-body ml-3">
-                                        <h6 class="mb-0 text-uppercase">Jason Doe</h6>
-                                        <p class="small text-muted mb-0 text-uppercase">20 May 2020</p>
-                                        <ul class="list-inline mb-1 text-xs">
-                                            <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                            <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                            <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                            <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                            <li class="list-inline-item m-0"><i
-                                                    class="fas fa-star-half-alt text-warning"></i></li>
-                                        </ul>
-                                        <p class="text-small mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur
-                                            adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                            aliqua.</p>
+                                @forelse ($product->reviews as $review)
+                                    <div class="media mb-3" style="position: relative">
+
+                                        @if (reviewOwnershipVerification($review))
+                                            <div class="review-actions d-flex align-items-center" style="gap:10px">
+                                                <a href="{{ route('frontend.products.reviews.edit', $review->id) }}"
+                                                    class="btn btn-sm btn-success edit-review">Edit</a>
+
+                                                <form
+                                                    action="{{ route('frontend.products.reviews.destroy', $review->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('delete')
+
+                                                    <button class="btn btn-sm btn-danger edit-review">Delete</button>
+                                                </form>
+                                            </div>
+                                        @endif
+
+                                        <img class="rounded-circle"
+                                            src="{{ asset('storage/' . $review->user->user_image) }}" alt=""
+                                            width="50">
+                                        <div class="media-body ml-3">
+                                            <h6 class="mb-0 text-uppercase">
+                                                {{ $review->user->first_name . ' ' . $review->user->last_name }}</h6>
+                                            {{-- <p class="small text-muted mb-0 text-uppercase">20 May 2020</p> --}}
+                                            <p class="small text-muted mb-0 text-uppercase">{{ $review->created_at }}</p>
+
+                                            <ul class="list-inline mb-1 text-xs">
+
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <li
+                                                        class="review-star {{ $review->rate >= $i ? ' active' : '' }} list-inline-item m-0">
+                                                        <i class="fas fa-star"></i>
+                                                    </li>
+                                                @endfor
+
+                                            </ul>
+                                            <p class="text-small mb-0 text-muted">
+                                                {{ $review->content }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="media"><img class="rounded-circle"
-                                        src="{{ asset('frontend/img/customer-2.png') }}" alt="" width="50">
-                                    <div class="media-body ml-3">
-                                        <h6 class="mb-0 text-uppercase">Jason Doe</h6>
-                                        <p class="small text-muted mb-0 text-uppercase">20 May 2020</p>
-                                        <ul class="list-inline mb-1 text-xs">
-                                            <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                            <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                            <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                            <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                            <li class="list-inline-item m-0"><i
-                                                    class="fas fa-star-half-alt text-warning"></i></li>
-                                        </ul>
-                                        <p class="text-small mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur
-                                            adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                            aliqua.</p>
+                                @empty
+                                    <p class="text-muted">There's no reviews in this product.</p>
+                                @endforelse
+
+                                @if (!$userHasReview)
+                                    <div class="add-reviews-area mt-3">
+                                        <form action="{{ route('frontend.products.reviews.store', $product->id) }}"
+                                            class="w-100" method="POST">
+
+                                            @csrf
+                                            <p class="mb-1">Add review to this product</p>
+                                            <ul class="review-rating list-inline mb-1 text-xs">
+                                                <li class="list-inline-item m- 0"><i class="fas fa-star"></i>
+                                                </li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star"></i>
+                                                </li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star"></i>
+                                                </li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star"></i>
+                                                </li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star"></i>
+                                                </li>
+                                            </ul>
+
+                                            <input type="hidden" name="rate" class="d-none" id="review-rating">
+
+                                            @error('rate')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+
+                                            <div class="review-content d-none">
+                                                <textarea name="content" class="form-control w-100 mb-3" cols="30" rows="10"></textarea>
+
+                                                @error('content')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+
+                                                <button class="btn btn-primary">Add Review</button>
+                                            </div>
+                                        </form>
+
+                                        <script>
+                                            const reviewRatingStarsContainer = document.querySelector('.review-rating');
+                                            const reviewRatingStars = Array.from(reviewRatingStarsContainer.querySelectorAll('li')).reverse();
+                                            const reviewInput = document.getElementById('review-rating');
+                                            const reviewContent = document.querySelector('.review-content');
+
+                                            reviewRatingStars.forEach((star, index) => {
+                                                star.onclick = function() {
+                                                    reviewRatingStars.forEach((ele) => ele.classList.remove('active'))
+                                                    for (let i = 0; i <= index; i++) {
+                                                        reviewRatingStars[i].classList.add('active');
+                                                    }
+                                                    reviewInput.value = index + 1;
+                                                    reviewContent.classList.remove('d-none');
+                                                }
+                                            });
+                                        </script>
                                     </div>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -147,94 +220,44 @@
             <!-- RELATED PRODUCTS-->
             <h2 class="h5 text-uppercase mb-4">Related products</h2>
             <div class="row">
-                <!-- PRODUCT-->
-                <div class="col-lg-3 col-sm-6">
-                    <div class="product text-center skel-loader">
-                        <div class="d-block mb-3 position-relative"><a class="d-block" href="detail.html"><img
-                                    class="img-fluid w-100" src="{{ asset('frontend/img/product-1.jpg') }}"
-                                    alt="..."></a>
-                            <div class="product-overlay">
-                                <ul class="mb-0 list-inline">
-                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark"
-                                            href="#"><i class="far fa-heart"></i></a></li>
-                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark"
-                                            href="#">Add to cart</a></li>
-                                    <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark"
-                                            href="#productView" data-toggle="modal"><i class="fas fa-expand"></i></a>
-                                    </li>
-                                </ul>
+
+                @forelse ($relatedProducts as $relatedProduct)
+                    <!-- PRODUCT-->
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="product text-center skel-loader">
+                            <div class="d-block mb-3 position-relative">
+                                <a class="d-block" href="detail.html">
+                                    <img class="img-fluid w-100"
+                                        src="{{ asset('storage/' . $relatedProduct->images[0]->path) }}" alt="...">
+                                </a>
+                                <div class="product-overlay">
+                                    <ul class="mb-0 list-inline">
+                                        <li class="list-inline-item m-0 p-0">
+                                            <a class="btn btn-sm btn-outline-dark" href="#"><i
+                                                    class="far fa-heart"></i>
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item m-0 p-0">
+                                            <a class="btn btn-sm btn-dark" href="#">Add to cart</a>
+                                        </li>
+                                        <li class="list-inline-item mr-0">
+                                            <a class="btn btn-sm btn-outline-dark" href="#productView"
+                                                data-toggle="modal">
+                                                <i class="fas fa-expand"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
+                            <h6>
+                                <a class="reset-anchor" href="detail.html">{{ $relatedProduct->title }}</a>
+                            </h6>
+                            <p class="small text-muted">${{ $relatedProduct->price }}</p>
                         </div>
-                        <h6> <a class="reset-anchor" href="detail.html">Kui Ye Chen’s AirPods</a></h6>
-                        <p class="small text-muted">$250</p>
                     </div>
-                </div>
-                <!-- PRODUCT-->
-                <div class="col-lg-3 col-sm-6">
-                    <div class="product text-center skel-loader">
-                        <div class="d-block mb-3 position-relative"><a class="d-block" href="detail.html"><img
-                                    class="img-fluid w-100" src="{{ asset('frontend/img/product-2.jpg') }}"
-                                    alt="..."></a>
-                            <div class="product-overlay">
-                                <ul class="mb-0 list-inline">
-                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark"
-                                            href="#"><i class="far fa-heart"></i></a></li>
-                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark"
-                                            href="#">Add to cart</a></li>
-                                    <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark"
-                                            href="#productView" data-toggle="modal"><i class="fas fa-expand"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <h6> <a class="reset-anchor" href="detail.html">Air Jordan 12 gym red</a></h6>
-                        <p class="small text-muted">$300</p>
-                    </div>
-                </div>
-                <!-- PRODUCT-->
-                <div class="col-lg-3 col-sm-6">
-                    <div class="product text-center skel-loader">
-                        <div class="d-block mb-3 position-relative"><a class="d-block" href="detail.html"><img
-                                    class="img-fluid w-100" src="{{ asset('frontend/img/product-3.jpg') }}"
-                                    alt="..."></a>
-                            <div class="product-overlay">
-                                <ul class="mb-0 list-inline">
-                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark"
-                                            href="#"><i class="far fa-heart"></i></a></li>
-                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark"
-                                            href="#">Add to cart</a></li>
-                                    <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark"
-                                            href="#productView" data-toggle="modal"><i class="fas fa-expand"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <h6> <a class="reset-anchor" href="detail.html">Cyan cotton t-shirt</a></h6>
-                        <p class="small text-muted">$25</p>
-                    </div>
-                </div>
-                <!-- PRODUCT-->
-                <div class="col-lg-3 col-sm-6">
-                    <div class="product text-center skel-loader">
-                        <div class="d-block mb-3 position-relative"><a class="d-block" href="detail.html"><img
-                                    class="img-fluid w-100" src="{{ asset('frontend/img/product-4.jpg') }}"
-                                    alt="..."></a>
-                            <div class="product-overlay">
-                                <ul class="mb-0 list-inline">
-                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark"
-                                            href="#"><i class="far fa-heart"></i></a></li>
-                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark"
-                                            href="#">Add to cart</a></li>
-                                    <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark"
-                                            href="#productView" data-toggle="modal"><i class="fas fa-expand"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <h6> <a class="reset-anchor" href="detail.html">Timex Unisex Originals</a></h6>
-                        <p class="small text-muted">$351</p>
-                    </div>
-                </div>
+                @empty
+                @endforelse
+
             </div>
         </div>
     </section>

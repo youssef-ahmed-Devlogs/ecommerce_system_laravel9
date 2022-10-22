@@ -83,46 +83,6 @@
                                     Home
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <!-- Link-->
-                                <a class="nav-link {{ request()->routeIs('frontend.shop') ? ' active' : '' }}"
-                                    href="{{ route('frontend.shop') }}">
-                                    Shop
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <!-- Link-->
-                                <a class="nav-link {{ request()->routeIs('frontend.detail') ? ' active' : '' }}"
-                                    href="{{ route('frontend.detail') }}">Product
-                                    detail
-                                </a>
-                            </li>
-                            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown"
-                                    href="#" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">Pages</a>
-                                <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
-                                    <a class="dropdown-item border-0 transition-link"
-                                        href="{{ route('frontend.index') }}">
-                                        Homepage
-                                    </a>
-                                    <a class="dropdown-item border-0 transition-link"
-                                        href="{{ route('frontend.index') }}">
-                                        Category
-                                    </a>
-                                    <a class="dropdown-item border-0 transition-link"
-                                        href="{{ route('frontend.detail') }}">
-                                        Product detail
-                                    </a>
-                                    <a class="dropdown-item border-0 transition-link"
-                                        href="{{ route('frontend.cart') }}">
-                                        Shopping cart
-                                    </a>
-                                    <a class="dropdown-item border-0 transition-link"
-                                        href="{{ route('frontend.checkout') }}">
-                                        Checkout
-                                    </a>
-                                </div>
-                            </li>
                         </ul>
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
@@ -146,16 +106,31 @@
                                     </a>
                                 </li>
                             @else
-                                <li class="nav-item">
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button class="nav-link"
-                                            style="cursor: pointer;outline: none;background:none;border:none"
-                                            type="submit">
+                                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown"
+                                        href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                        {{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}
+
+                                    </a>
+                                    <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
+                                        <a class="dropdown-item border-0 transition-link"
+                                            href="{{ route('frontend.index') }}">
                                             <i class="fas fa-user-alt mr-1 text-gray"></i>
-                                            Logout
-                                        </button>
-                                    </form>
+                                            Profile
+                                        </a>
+                                        <form action="{{ route('logout') }}" method="POST">
+                                            @csrf
+                                            <button class="dropdown-item border-0 transition-link"
+                                                style="cursor: pointer;outline: none;background:none;border:none"
+                                                type="submit">
+                                                <i class="fas fa-sign-out-alt mr-1 text-gray"></i>
+                                                Logout
+                                            </button>
+                                        </form>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+
                                 </li>
                             @endguest
                         </ul>
@@ -223,31 +198,44 @@
             <div class="modal-content">
                 <div class="modal-body p-0">
                     <div class="row align-items-stretch">
-                        <div class="col-lg-6 p-lg-0"><a class="product-view d-block h-100 bg-cover bg-center"
+                        <div class="col-lg-6 p-lg-0">
+                            <a class="product-view d-block h-100 bg-cover bg-center"
                                 style="background: url(img/product-5.jpg)" href="img/product-5.jpg"
-                                data-lightbox="productview" title="Red digital smartwatch"></a><a class="d-none"
-                                href="img/product-5-alt-1.jpg" title="Red digital smartwatch"
-                                data-lightbox="productview"></a><a class="d-none" href="img/product-5-alt-2.jpg"
-                                title="Red digital smartwatch" data-lightbox="productview"></a></div>
+                                data-lightbox="productview" title="Red digital smartwatch">
+                            </a>
+                            <a class="d-none" href="img/product-5-alt-1.jpg" title="Red digital smartwatch"
+                                data-lightbox="productview">
+                            </a>
+                            <a class="d-none" href="img/product-5-alt-2.jpg" title="Red digital smartwatch"
+                                data-lightbox="productview">
+                            </a>
+                        </div>
                         <div class="col-lg-6">
-                            <button class="close p-4" type="button" data-dismiss="modal" aria-label="Close"><span
-                                    aria-hidden="true">×</span></button>
+                            <button class="close p-4" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
                             <div class="p-5 my-md-4">
                                 <ul class="list-inline mb-2">
-                                    <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i>
+                                    <li class="list-inline-item m-0">
+                                        <i class="fas fa-star small text-warning"></i>
                                     </li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i>
+                                    <li class="list-inline-item m-0">
+                                        <i class="fas fa-star small text-warning"></i>
                                     </li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i>
+                                    <li class="list-inline-item m-0">
+                                        <i class="fas fa-star small text-warning"></i>
                                     </li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i>
+                                    <li class="list-inline-item m-0">
+                                        <i class="fas fa-star small text-warning"></i>
                                     </li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i>
+                                    <li class="list-inline-item m-0">
+                                        <i class="fas fa-star small text-warning"></i>
                                     </li>
                                 </ul>
                                 <h2 class="h4">Red digital smartwatch</h2>
                                 <p class="text-muted">$250</p>
-                                <p class="text-small mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                <p class="text-small mb-4">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                     In
                                     ut ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus et magnis
                                     dis
@@ -260,19 +248,28 @@
                                             class="border d-flex align-items-center justify-content-between py-1 px-3">
                                             <span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
                                             <div class="quantity">
-                                                <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
+                                                <button class="dec-btn p-0">
+                                                    <i class="fas fa-caret-left"></i>
+                                                </button>
                                                 <input class="form-control border-0 shadow-0 p-0" type="text"
                                                     value="1">
-                                                <button class="inc-btn p-0"><i
-                                                        class="fas fa-caret-right"></i></button>
+                                                <button class="inc-btn p-0">
+                                                    <i class="fas fa-caret-right"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-5 pl-sm-0"><a
-                                            class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
-                                            href="cart.html">Add to cart</a></div>
-                                </div><a class="btn btn-link text-dark p-0" href="#"><i
-                                        class="far fa-heart mr-2"></i>Add to wish list</a>
+                                    <div class="col-sm-5 pl-sm-0">
+                                        <a class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
+                                            href="cart.html">
+                                            Add to cart
+                                        </a>
+                                    </div>
+                                </div>
+                                <a class="btn btn-link text-dark p-0" href="#">
+                                    <i class="far fa-heart mr-2"></i>
+                                    Add to wish list
+                                </a>
                             </div>
                         </div>
                     </div>
